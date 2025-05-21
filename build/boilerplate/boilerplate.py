@@ -86,6 +86,12 @@ def file_passes(filename, refs, regexs):
         if found != 0:
             break
 
+    p = regexs["copyright_holder"]
+    for i, d in enumerate(data):
+        (data[i], found) = p.subn('COPYRIGHT-HOLDER', d)
+        if found != 0:
+            break
+
     # if we don't match the reference at this point, fail
     if ref != data:
         return False
@@ -143,6 +149,7 @@ def get_regexs():
     regexs["go_build_constraints"] = re.compile(r"^(//\s*(\+build|go:build).*\n)+\n", re.MULTILINE)
     # strip #!.* from shell scripts
     regexs["shebang"] = re.compile(r"^(#!.*\n)\n*", re.MULTILINE)
+    regexs["copyright_holder"] = re.compile( 'Google\sInc|Jiaqi\sLiu' )
     return regexs
 
 def main():
