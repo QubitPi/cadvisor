@@ -1,0 +1,1534 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Analyzes resource usage and performance characteristics of running containers.">
+      
+      
+        <meta name="author" content="QubitPi (https://github.com/Qubitpi)">
+      
+      
+        <link rel="canonical" href="https://cadvisor.qubitpi.org/storage/prometheus/">
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/logo/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>Monitoring cAdvisor with Prometheus - cAdvisor Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/css/customizations.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#monitoring-cadvisor-with-prometheus" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="cAdvisor Documentation" class="md-header__button md-logo" aria-label="cAdvisor Documentation" data-md-component="logo">
+      
+  <img src="https://github.com/QubitPi/cadvisor/raw/master/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            cAdvisor Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Monitoring cAdvisor with Prometheus
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/QubitPi/cadvisor" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    cadvisor
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../api/" class="md-tabs__link">
+          
+  
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+  Storage Plugins
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="cAdvisor Documentation" class="md-nav__button md-logo" aria-label="cAdvisor Documentation" data-md-component="logo">
+      
+  <img src="https://github.com/QubitPi/cadvisor/raw/master/logo.png" alt="logo">
+
+    </a>
+    cAdvisor Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/QubitPi/cadvisor" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    cadvisor
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    REST API
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api_v2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    REST API V2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../application_metrics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Application Metrics
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../clients/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    API Clients
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../running/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Running cAdvisor
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runtime_options/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Runtime Options
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../web/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Web UI
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Storage Plugins
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Storage Plugins
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Storage Plugins
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/QubitPi/cadvisor/edit/master/docs/storage/prometheus.md" title="Edit this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/QubitPi/cadvisor/raw/master/docs/storage/prometheus.md" title="View source of this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
+    </a>
+  
+
+
+<h1 id="monitoring-cadvisor-with-prometheus"><a class="toclink" href="#monitoring-cadvisor-with-prometheus">Monitoring cAdvisor with Prometheus</a></h1>
+<p>cAdvisor exposes container and hardware statistics as <a href="https://prometheus.io">Prometheus</a> metrics out of the box. By default, these metrics are served under the <code>/metrics</code> HTTP endpoint. This endpoint may be customized by setting the <code>-prometheus_endpoint</code> and <code>-disable_metrics</code> or <code>-enable_metrics</code> command-line flags.</p>
+<p>To collect some of metrics it is required to build cAdvisor with additional flags, for details see <a href="../../development/build/">build instructions</a>, additional flags are indicated in "additional build flag" column in table below.</p>
+<p>To monitor cAdvisor with Prometheus, simply configure one or more jobs in Prometheus which scrape the relevant cAdvisor processes at that metrics endpoint. For details, see Prometheus's <a href="https://prometheus.io/docs/operating/configuration/">Configuration</a> documentation, as well as the <a href="https://prometheus.io/docs/introduction/getting_started/">Getting started</a> guide.</p>
+<h1 id="examples"><a class="toclink" href="#examples">Examples</a></h1>
+<ul>
+<li>
+<p><a href="https://labs.ctl.io/">CenturyLink Labs</a> did an excellent write up on <a href="https://www.ctl.io/developers/blog/post/monitoring-docker-services-with-prometheus/">Monitoring Docker services with Prometheus +cAdvisor</a>, while it is great to get a better overview of cAdvisor integration with Prometheus, the PromDash GUI part is outdated as it has been deprecated for Grafana.</p>
+</li>
+<li>
+<p><a href="https://github.com/vegasbrianc">vegasbrianc</a> provides a <a href="https://github.com/vegasbrianc/prometheus">starter project</a> for cAdvisor and Prometheus monitoring, alongide a ready-to-use <a href="https://github.com/vegasbrianc/grafana_dashboard">Grafana dashboard</a>.</p>
+</li>
+</ul>
+<h2 id="prometheus-container-metrics"><a class="toclink" href="#prometheus-container-metrics">Prometheus container metrics</a></h2>
+<p>The table below lists the Prometheus container metrics exposed by cAdvisor (in alphabetical order by metric name) and corresponding <code>-disable_metrics</code> / <code>-enable_metrics</code> option parameter:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Metric name</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Description</th>
+<th style="text-align: left;">Unit (where applicable)</th>
+<th style="text-align: left;">option parameter</th>
+<th style="text-align: left;">additional build flag</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>container_blkio_device_usage_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Blkio device bytes usage</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;">diskIO</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_cpu_cfs_periods_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Number of elapsed enforcement period intervals</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">cpu</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_cpu_cfs_throttled_periods_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Number of throttled period intervals</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">cpu</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_cpu_cfs_throttled_seconds_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Total time duration the container has been throttled</td>
+<td style="text-align: left;">seconds</td>
+<td style="text-align: left;">cpu</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_cpu_load_average_10s</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Value of container cpu load average over the last 10 seconds</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">cpuLoad</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_cpu_schedstat_run_periods_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Number of times processes of the cgroup have run on the cpu</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">sched</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_cpu_schedstat_runqueue_seconds_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Time duration processes of the container have been waiting on a runqueue</td>
+<td style="text-align: left;">seconds</td>
+<td style="text-align: left;">sched</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_cpu_schedstat_run_seconds_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Time duration the processes of the container have run on the CPU</td>
+<td style="text-align: left;">seconds</td>
+<td style="text-align: left;">sched</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_cpu_system_seconds_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative system cpu time consumed</td>
+<td style="text-align: left;">seconds</td>
+<td style="text-align: left;">cpu</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_cpu_usage_seconds_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative cpu time consumed</td>
+<td style="text-align: left;">seconds</td>
+<td style="text-align: left;">cpu</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_cpu_user_seconds_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative user cpu time consumed</td>
+<td style="text-align: left;">seconds</td>
+<td style="text-align: left;">cpu</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_file_descriptors</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Number of open file descriptors for the container</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">process</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_fs_inodes_free</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Number of available Inodes</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">disk</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_fs_inodes_total</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Total number of Inodes</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">disk</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_fs_io_current</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Number of I/Os currently in progress</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">diskIO</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_fs_io_time_seconds_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative count of seconds spent doing I/Os</td>
+<td style="text-align: left;">seconds</td>
+<td style="text-align: left;">diskIO</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_fs_io_time_weighted_seconds_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative weighted I/O time</td>
+<td style="text-align: left;">seconds</td>
+<td style="text-align: left;">diskIO</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_fs_limit_bytes</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Number of bytes that can be consumed by the container on this filesystem</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;">disk</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_fs_reads_bytes_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative count of bytes read</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;">diskIO</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_fs_read_seconds_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative count of seconds spent reading</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">diskIO</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_fs_reads_merged_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative count of reads merged</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">diskIO</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_fs_reads_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative count of reads completed</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">diskIO</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_fs_sector_reads_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative count of sector reads completed</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">diskIO</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_fs_sector_writes_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative count of sector writes completed</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">diskIO</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_fs_usage_bytes</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Number of bytes that are consumed by the container on this filesystem</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;">disk</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_fs_writes_bytes_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative count of bytes written</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;">diskIO</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_fs_write_seconds_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative count of seconds spent writing</td>
+<td style="text-align: left;">seconds</td>
+<td style="text-align: left;">diskIO</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_fs_writes_merged_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative count of writes merged</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">diskIO</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_fs_writes_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative count of writes completed</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">diskIO</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_hugetlb_failcnt</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Number of hugepage usage hits limits</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">hugetlb</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_hugetlb_max_usage_bytes</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Maximum hugepage usages recorded</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;">hugetlb</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_hugetlb_usage_bytes</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Current hugepage usage</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;">hugetlb</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_last_seen</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Last time a container was seen by the exporter</td>
+<td style="text-align: left;">timestamp</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_llc_occupancy_bytes</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Last level cache usage statistics for container counted with RDT Memory Bandwidth Monitoring (MBM).</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;">resctrl</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_memory_bandwidth_bytes</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Total memory bandwidth usage statistics for container counted with RDT Memory Bandwidth Monitoring (MBM).</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;">resctrl</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_memory_bandwidth_local_bytes</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Local memory bandwidth usage statistics for container counted with RDT Memory Bandwidth Monitoring (MBM).</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;">resctrl</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_memory_cache</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Total page cache memory</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;">memory</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_memory_failcnt</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Number of memory usage hits limits</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">memory</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_memory_failures_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative count of memory allocation failures</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">memory</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_memory_mapped_file</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Size of memory mapped files</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;">memory</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_memory_max_usage_bytes</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Maximum memory usage recorded</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;">memory</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_memory_migrate</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Memory migrate status</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">cpuset</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_memory_numa_pages</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Number of used pages per NUMA node</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">memory_numa</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_memory_rss</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Size of RSS</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;">memory</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_memory_swap</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Container swap usage</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;">memory</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_memory_usage_bytes</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Current memory usage, including all memory regardless of when it was accessed</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;">memory</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_memory_working_set_bytes</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Current working set</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;">memory</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_network_advance_tcp_stats_total</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">advanced tcp connections statistic for container</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">advtcp</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_network_receive_bytes_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative count of bytes received</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;">network</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_network_receive_errors_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative count of errors encountered while receiving</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">network</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_network_receive_packets_dropped_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative count of packets dropped while receiving</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">network</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_network_receive_packets_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative count of packets received</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">network</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_network_tcp6_usage_total</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">tcp6 connection usage statistic for container</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">tcp</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_network_tcp_usage_total</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">tcp connection usage statistic for container</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">tcp</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_network_transmit_bytes_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative count of bytes transmitted</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;">network</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_network_transmit_errors_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative count of errors encountered while transmitting</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">network</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_network_transmit_packets_dropped_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative count of packets dropped while transmitting</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">network</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_network_transmit_packets_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Cumulative count of packets transmitted</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">network</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_network_udp6_usage_total</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">udp6 connection usage statistic for container</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">udp</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_network_udp_usage_total</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">udp connection usage statistic for container</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">udp</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_oom_events_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Count of out of memory events observed for the container</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">oom_event</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_perf_events_scaling_ratio</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Scaling ratio for perf event counter (event can be identified by <code>event</code> label and <code>cpu</code> indicates the core for which event was measured). See <a href="../../runtime_options/#perf-events">perf event configuration</a>.</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">perf_event</td>
+<td style="text-align: left;">libpfm</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_perf_events_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Scaled counter of perf core event (event can be identified by <code>event</code> label and <code>cpu</code> indicates the core for which event was measured). See <a href="../../runtime_options/#perf-events">perf event configuration</a>.</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">perf_event</td>
+<td style="text-align: left;">libpfm</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_perf_uncore_events_scaling_ratio</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Scaling ratio for perf uncore event counter (event can be identified by <code>event</code> label, <code>pmu</code> and <code>socket</code> lables indicate the PMU and the CPU socket for which event was measured). See <a href="../../runtime_options/#perf-events">perf event configuration</a>. Metric exists only for main cgroup (id="/").</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">perf_event</td>
+<td style="text-align: left;">libpfm</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_perf_uncore_events_total</code></td>
+<td style="text-align: left;">Counter</td>
+<td style="text-align: left;">Scaled counter of perf uncore event (event can be identified by <code>event</code> label, <code>pmu</code> and <code>socket</code> lables indicate the PMU and the CPU socket for which event was measured). See <a href="../../runtime_options/#perf-events">perf event configuration</a>). Metric exists only for main cgroup (id="/").</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">perf_event</td>
+<td style="text-align: left;">libpfm</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_processes</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Number of processes running inside the container</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">process</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_referenced_bytes</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Container referenced bytes during last measurements cycle based on Referenced field in /proc/smaps file, with /proc/PIDs/clear_refs set to 1 after defined number of cycles configured through <code>referenced_reset_interval</code> cAdvisor parameter.</br>Warning: this is intrusive collection because can influence kernel page reclaim policy and add latency. Refer to <a href="https://github.com/brendangregg/wss#wsspl-referenced-page-flag">https://github.com/brendangregg/wss#wsspl-referenced-page-flag</a> for more details.</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;">referenced_memory</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_sockets</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Number of open sockets for the container</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">process</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_spec_cpu_period</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">CPU period of the container</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_spec_cpu_quota</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">CPU quota of the container</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_spec_cpu_shares</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">CPU share of the container</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_spec_memory_limit_bytes</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Memory limit for the container</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_spec_memory_reservation_limit_bytes</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Memory reservation limit for the container</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_spec_memory_swap_limit_bytes</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Memory swap limit for the container</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_start_time_seconds</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Start time of the container since unix epoch</td>
+<td style="text-align: left;">seconds</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_tasks_state</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Number of tasks in given state (<code>sleeping</code>, <code>running</code>, <code>stopped</code>, <code>uninterruptible</code>, or <code>ioawaiting</code>)</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">cpuLoad</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_threads</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Number of threads running inside the container</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">process</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_threads_max</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Maximum number of threads allowed inside the container</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">process</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>container_ulimits_soft</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Soft ulimit values for the container root process. Unlimited if -1, except priority and nice</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">process</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="prometheus-hardware-metrics"><a class="toclink" href="#prometheus-hardware-metrics">Prometheus hardware metrics</a></h2>
+<p>The table below lists the Prometheus hardware metrics exposed by cAdvisor (in alphabetical order by metric name) and corresponding <code>-disable_metrics</code> / <code>-enable_metrics</code> option parameter:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Metric name</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Description</th>
+<th style="text-align: left;">Unit (where applicable)</th>
+<th style="text-align: left;">option parameter</th>
+<th style="text-align: left;">additional build flag</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>machine_cpu_cache_capacity_bytes</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Cache size in bytes assigned to NUMA node and CPU core</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;">cpu_topology</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>machine_cpu_cores</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Number of logical CPU cores</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>machine_cpu_physical_cores</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Number of physical CPU cores</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>machine_cpu_sockets</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Number of CPU sockets</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>machine_dimm_capacity_bytes</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Total RAM DIMM capacity (all types memory modules) value labeled by dimm type,<br>information is retrieved from sysfs edac per-DIMM API (/sys/devices/system/edac/mc/) introduced in kernel 3.6</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>machine_dimm_count</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Number of RAM DIMM (all types memory modules) value labeled by dimm type,<br>information is retrieved from sysfs edac per-DIMM API (/sys/devices/system/edac/mc/) introduced in kernel 3.6</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>machine_memory_bytes</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Amount of memory installed on the machine</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>machine_swap_bytes</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Amount of swap memory available on the machine</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>machine_node_distance</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Distance between NUMA node and target NUMA node</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">cpu_topology</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>machine_node_hugepages_count</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Numer of hugepages assigned to NUMA node</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">cpu_topology</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>machine_node_memory_capacity_bytes</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Amount of memory assigned to NUMA node</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;">cpu_topology</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>machine_nvm_avg_power_budget_watts</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">NVM power budget</td>
+<td style="text-align: left;">watts</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">libipmctl</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>machine_nvm_capacity</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">NVM capacity value labeled by NVM mode (memory mode or app direct mode)</td>
+<td style="text-align: left;">bytes</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">libipmctl</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>machine_thread_siblings_count</code></td>
+<td style="text-align: left;">Gauge</td>
+<td style="text-align: left;">Number of CPU thread siblings</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">cpu_topology</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      <p>&copy <a href="https://github.com/QubitPi"><em>QubitPi</em></a><br/><span>This project is licensed under the Apache license.</span></p>
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.top", "navigation.expand", "navigation.instant", "content.action.edit", "content.action.view", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  </body>
+</html>
