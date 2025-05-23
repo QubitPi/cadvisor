@@ -1,6 +1,6 @@
-#!/usr/bin/env python3
+#!/bin/bash
 
-# Copyright YEAR COPYRIGHT-HOLDER. All Rights Reserved.
+# Copyright 2025 Jiaqi Liu. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,3 +13,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+set -ex
+
+docker run \
+  --rm \
+  --quiet \
+  --user "$(id -u):$(id -g)" \
+  --volume "./:/docs" \
+  --name "build-docs" \
+  squidfunk/mkdocs-material:9.6 build --strict
+
+# Remove unnecessary build artifacts: https://github.com/squidfunk/mkdocs-material/issues/2519
+# site/ is the build output folder.
+cd site
+find . -type f -name '*.min.js.map' -delete -o -name '*.min.css.map' -delete
+rm sitemap.xml.gz
+rm assets/images/favicon.png
+rm -r assets/javascripts/lunr

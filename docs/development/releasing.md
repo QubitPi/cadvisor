@@ -4,7 +4,7 @@
 
 Example: https://github.com/google/cadvisor/pull/1281
 
-Add release notes to [CHANGELOG.md](../../CHANGELOG.md)
+Add release notes to [CHANGELOG.md](https://github.com/QubitPi/cadvisor/blob/master/CHANGELOG.md)
 
 - Tip: Use a github PR search to find changes since the last release
   `is:pr is:merged merged:>2016-04-21`

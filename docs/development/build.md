@@ -78,7 +78,7 @@ $GOPATH/src/github.com/google/cadvisor $ sudo ./cadvisor
 
 ### Perf Support
 
-It is required to include perf config (examplary config is available [here](../../perf/testing/perf-non-hardware.json)) to run cAdvisor with performance monitoring events:
+It is required to include perf config (examplary config is available [here](https://github.com/QubitPi/cadvisor/blob/master/perf/testing/perf-non-hardware.json)) to run cAdvisor with performance monitoring events:
 ```
 $GOPATH/src/github.com/google/cadvisor $ sudo ./cadvisor -perf_events_config=perf/testing/perf-non-hardware.json
 
