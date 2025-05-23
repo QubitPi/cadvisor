@@ -19,7 +19,7 @@ The resource name for machine information is as follows:
 
 `/api/v2.0/machine`
 
-The machine information is returned as a JSON object of the `MachineInfo` struct found in [info/v1/machine.go](../info/v1/machine.go)
+The machine information is returned as a JSON object of the `MachineInfo` struct found in [info/v1/machine.go](https://github.com/QubitPi/cadvisor/blob/master/info/v1/machine.go)
 
 ## Attributes
 
@@ -29,7 +29,7 @@ The resource name for attributes is:
 
 Hardware information includes all information covered by machine endpoint. Software information include version of cAdvisor, kernel, docker, and underlying OS.
 
-The actual object is the marshalled JSON of the `Attributes` struct found in [info/v2/machine.go](../info/v2/machine.go)
+The actual object is the marshalled JSON of the `Attributes` struct found in [info/v2/machine.go](https://github.com/QubitPi/cadvisor/blob/master/info/v2/machine.go)
 
 ## Container Stats
 The resource name for container stats information is:
@@ -71,7 +71,7 @@ Note that `recursive` is only valid when docker root is specified. It is used to
 
 ### Returned stats
 
-The stats information is returned  as a JSON object containing a map from container name to list of stat objects. Stat object is the marshalled JSON of the `ContainerStats` struct found in [info/v2/container.go](../info/v2/container.go)
+The stats information is returned  as a JSON object containing a map from container name to list of stat objects. Stat object is the marshalled JSON of the `ContainerStats` struct found in [info/v2/container.go](https://github.com/QubitPi/cadvisor/blob/master/info/v2/container.go)
 
 ## Container Stats Summary
 Instead of a list of periodically collected detailed samples, cAdvisor can also provide a summary of stats for a container. It provides the latest collected stats and percentiles (max, average, and 90%ile) values for usage in last minute and hour. (Usage summary for last day exists, but is not currently used.)
@@ -83,7 +83,7 @@ The resource name for container summary information is:
 
 Additionally, `type` and `recursive` options can be used to describe the identifier type and ask for summary of all subcontainers respectively. The semantics are same as described for container stats above.
 
-The returned summary information is a JSON object containing a map from container name to list of summary objects. Summary object is the marshalled JSON of the `DerivedStats` struct found in [info/v2/container.go](../info/v2/container.go)
+The returned summary information is a JSON object containing a map from container name to list of summary objects. Summary object is the marshalled JSON of the `DerivedStats` struct found in [info/v2/container.go](https://github.com/QubitPi/cadvisor/blob/master/info/v2/container.go)
 
 ## Container Spec
 
@@ -92,5 +92,5 @@ The resource name for container stats information is:
 
 Additionally, `type` and `recursive` options can be used to describe the identifier type and ask for spec of all subcontainers respectively. The semantics are same as described for container stats above.
 
-The spec information is returned as a JSON object containing a map from container name to list of spec objects. Spec object is the marshalled JSON of the `ContainerSpec` struct found in [info/v2/container.go](../info/v2/container.go)
+The spec information is returned as a JSON object containing a map from container name to list of spec objects. Spec object is the marshalled JSON of the `ContainerSpec` struct found in [info/v2/container.go](https://github.com/QubitPi/cadvisor/blob/master/info/v2/container.go)
 
