@@ -812,11 +812,11 @@
 <h3 id="http-basic-authentication"><a class="toclink" href="#http-basic-authentication">HTTP basic authentication</a></h3>
 <p>You will need to add a <em>http_auth_file</em> parameter with a HTTP basic auth file generated using htpasswd to enable HTTP basic auth. By default the auth realm is set as localhost.</p>
 <p><code>./cadvisor --http_auth_file test.htpasswd --http_auth_realm localhost</code></p>
-<p>The <a href="../test.htpasswd">test.htpasswd</a> file provided has a username and password already added (<code>admin:password1</code>) for testing purposes.</p>
+<p>The <a href="https://github.com/QubitPi/cadvisor/blob/master/test.htpasswd">test.htpasswd</a> file provided has a username and password already added (<code>admin:password1</code>) for testing purposes.</p>
 <h3 id="http-digest-authentication"><a class="toclink" href="#http-digest-authentication">HTTP Digest authentication</a></h3>
 <p>You will need to add a <em>http_digest_file</em> parameter with a HTTP digest auth file generated using htdigest to enable HTTP Digest auth. By default the auth realm is set as localhost.</p>
 <p><code>./cadvisor --http_digest_file test.htdigest --http_digest_realm localhost</code></p>
-<p>The <a href="../test.htdigest">test.htdigest</a> file provided has a username and password already added (<code>admin:password1</code>) for testing purposes.</p>
+<p>The <a href="https://github.com/QubitPi/cadvisor/blob/master/test.htdigest">test.htdigest</a> file provided has a username and password already added (<code>admin:password1</code>) for testing purposes.</p>
 <p><strong>Note</strong> : You can use either type of authentication, in case you decide to use both files in the arguments only HTTP basic auth will be enabled. </p>
 
 

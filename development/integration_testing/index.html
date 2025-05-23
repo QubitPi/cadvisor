@@ -705,12 +705,12 @@
 
 <h1 id="integration-testing-cadvisor"><a class="toclink" href="#integration-testing-cadvisor">Integration Testing cAdvisor</a></h1>
 <h2 id="docker-based-tests"><a class="toclink" href="#docker-based-tests">Docker-based tests</a></h2>
-<p>The cAdvisor integration tests are run per-pr using <a href="https://help.github.com/en/actions">Github Actions</a>. Workflow configuration can be found at <a href=".github/workflows/test.yml">.github/workflows/test.yml</a>. Tests are executed in Docker containers run on MS Azure virtual machines.</p>
+<p>The cAdvisor integration tests are run per-pr using <a href="https://help.github.com/en/actions">Github Actions</a>. Workflow configuration can be found at <a href="https://github.com/QubitPi/cadvisor/blob/master/.github/workflows/test.yml">.github/workflows/test.yml</a>. Tests are executed in Docker containers run on MS Azure virtual machines.</p>
 <p>To run them locally Docker must be installed on your machine. Following command allows you to execute default suite of integration tests:</p>
 <div class="highlight"><pre><span></span><code>make docker-test-integration
 </code></pre></div>
 <p>Build scripts take care of building cAdvisor and integration tests, and executing them against running cAdvisor process.</p>
-<p>In order to run non-default tests suites (e.g. such that rely on third-party C libraries) you must source one of the files available at <a href="build/config">build/config</a>, e.g.:</p>
+<p>In order to run non-default tests suites (e.g. such that rely on third-party C libraries) you must source one of the files available at <a href="http://github.com/QubitPi/cadvisor/tree/master/build/config">build/config</a>, e.g.:</p>
 <div class="highlight"><pre><span></span><code>source build/config/libpfm4.sh &amp;&amp; make docker-test-integration
 </code></pre></div>
 <p>All the necessary packages will be installed, build flags will be applied and additional parameters will be passed to cAdvisor automatically. Configuration is performed using shell environment variables.</p>

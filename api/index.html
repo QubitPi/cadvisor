@@ -956,7 +956,7 @@
 <h3 id="events"><a class="toclink" href="#events">Events</a></h3>
 <p>The resource name for Docker container information is as follows:</p>
 <p><code>/api/v1.3/events/&lt;absolute container name&gt;</code></p>
-<p>Querying the endpoint receives a list of events which are a serialized <code>Event</code> JSON objects (found in <a href="../info/v1/container.go">info/v1/container.go</a>).</p>
+<p>Querying the endpoint receives a list of events which are a serialized <code>Event</code> JSON objects (found in <a href="https://github.com/QubitPi/cadvisor/blob/master/info/v1/container.go">info/v1/container.go</a>).</p>
 <p>The endpoint accepts a certain number of query parameters:</p>
 <table>
 <thead>
@@ -1024,13 +1024,13 @@
 <h3 id="docker-container-information"><a class="toclink" href="#docker-container-information">Docker Container Information</a></h3>
 <p>The resource name for Docker container information is as follows:</p>
 <p><code>/api/v1.2/docker/&lt;Docker container name or blank for all Docker containers&gt;</code></p>
-<p>The Docker name can be either the UUID or the short name of the container. It returns the information of the specified container(s). The information is returned as a list of serialized <code>ContainerInfo</code> JSON objects (found in <a href="../info/v1/container.go">info/v1/container.go</a>).</p>
+<p>The Docker name can be either the UUID or the short name of the container. It returns the information of the specified container(s). The information is returned as a list of serialized <code>ContainerInfo</code> JSON objects (found in <a href="https://github.com/QubitPi/cadvisor/blob/master/info/v1/container.go">info/v1/container.go</a>).</p>
 <h2 id="version-11"><a class="toclink" href="#version-11">Version 1.1</a></h2>
 <p>This version exposes the same endpoints as <code>v1.0</code> with one additional read-only endpoint.</p>
 <h3 id="subcontainer-information"><a class="toclink" href="#subcontainer-information">Subcontainer Information</a></h3>
 <p>The resource name for subcontainer information is as follows:</p>
 <p><code>/api/v1.1/subcontainers/&lt;absolute container name&gt;</code></p>
-<p>Where the absolute container name follows the lmctfy naming convention (described bellow). It returns the information of the specified container and all subcontainers (recursively). The information is returned as a list of serialized <code>ContainerInfo</code> JSON objects (found in <a href="../info/v1/container.go">info/v1/container.go</a>).</p>
+<p>Where the absolute container name follows the lmctfy naming convention (described bellow). It returns the information of the specified container and all subcontainers (recursively). The information is returned as a list of serialized <code>ContainerInfo</code> JSON objects (found in <a href="https://github.com/QubitPi/cadvisor/blob/master/info/v1/container.go">info/v1/container.go</a>).</p>
 <h2 id="version-10"><a class="toclink" href="#version-10">Version 1.0</a></h2>
 <p>This version exposes two main endpoints, one for container information and the other for machine information. Both endpoints are read-only in v1.0.</p>
 <h3 id="container-information"><a class="toclink" href="#container-information">Container Information</a></h3>
@@ -1068,7 +1068,7 @@
 <li>Detailed resource usage statistics of the container for the last <code>N</code> seconds (<code>N</code> is globally configurable in cAdvisor)</li>
 <li>Histogram of resource usage from the creation of the container</li>
 </ul>
-<p>The actual object is the marshalled JSON of the <code>ContainerInfo</code> struct found in <a href="../info/v1/container.go">info/v1/container.go</a></p>
+<p>The actual object is the marshalled JSON of the <code>ContainerInfo</code> struct found in <a href="https://github.com/QubitPi/cadvisor/blob/master/info/v1/container.go">info/v1/container.go</a></p>
 <h3 id="machine-information"><a class="toclink" href="#machine-information">Machine Information</a></h3>
 <p>The resource name for machine information is as follows:</p>
 <p><code>/api/vX.Y/machine</code></p>
@@ -1081,7 +1081,7 @@
 <li>Network devices: mac addresses, MTU, and speed (if available)</li>
 <li>Machine topology: Nodes, cores, threads, per-node memory, and caches</li>
 </ul>
-<p>The actual object is the marshalled JSON of the <code>MachineInfo</code> struct found in <a href="../info/v1/machine.go">info/v1/machine.go</a></p>
+<p>The actual object is the marshalled JSON of the <code>MachineInfo</code> struct found in <a href="https://github.com/QubitPi/cadvisor/blob/master/info/v1/machine.go">info/v1/machine.go</a></p>
 
 
 
