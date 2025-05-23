@@ -15,7 +15,7 @@ Obviously, replace the URL with the path to your actual cAdvisor REST endpoint.
 client.MachineInfo()
 ```
 
-There is no v2 MachineInfo API, so the v2 client exposes the [v1 MachineInfo](../../info/v1/machine.go#L131)
+There is no v2 MachineInfo API, so the v2 client exposes the [v1 MachineInfo](https://github.com/QubitPi/cadvisor/blob/master/info/v1/machine.go#L131)
 
 ```
 (*v1.MachineInfo)(0xc208022b10)({
@@ -30,7 +30,7 @@ There is no v2 MachineInfo API, so the v2 client exposes the [v1 MachineInfo](..
 })
 ```
 
-You can see the full specification of the [MachineInfo struct in the source](../../info/v1/machine.go#L131)
+You can see the full specification of the [MachineInfo struct in the source](https://github.com/QubitPi/cadvisor/blob/master/info/v1/machine.go#L131)
 
 ### VersionInfo
 
@@ -46,7 +46,7 @@ This method returns the cAdvisor version.
 client.Attributes()
 ```
 
-This method returns a [cadvisor/info/v2/Attributes](../../info/v2/machine.go#L24) struct with all the fields filled in. Attributes includes hardware attributes (as returned by MachineInfo) as well as software attributes (eg. software versions). Here is an example return value:
+This method returns a [cadvisor/info/v2/Attributes](https://github.com/QubitPi/cadvisor/blob/master/info/v2/machine.go#L24) struct with all the fields filled in. Attributes includes hardware attributes (as returned by MachineInfo) as well as software attributes (eg. software versions). Here is an example return value:
 
 ```
 (*v2.Attributes)({
@@ -65,5 +65,5 @@ This method returns a [cadvisor/info/v2/Attributes](../../info/v2/machine.go#L24
 })
 ```
 
-You can see the full specification of the [Attributes struct in the source](../../info/v2/machine.go#L24)
+You can see the full specification of the [Attributes struct in the source](https://github.com/QubitPi/cadvisor/blob/master/info/v2/machine.go#L24)
 
